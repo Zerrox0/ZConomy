@@ -19,7 +19,7 @@ public class Money extends BukkitCommand {
         super(name);
         this.description = "Zeigt an wie viel Geld du hast";
         this.usageMessage = "/money";
-        this.setPermission("ZC.money");
+        this.setPermission("ZC.money.balance");
         this.setAliases(Arrays.asList("balance", "bal"));
     }
 

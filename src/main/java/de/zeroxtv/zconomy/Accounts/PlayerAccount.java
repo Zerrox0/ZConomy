@@ -1,5 +1,7 @@
 package de.zeroxtv.zconomy.Accounts;
 
+import com.google.common.collect.Multiset;
+import com.sun.javafx.webkit.KeyCodeMap;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -8,6 +10,7 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -17,7 +20,6 @@ public class PlayerAccount {
     public static HashMap<UUID, PlayerAccount> loadedAccounts = new HashMap<UUID, PlayerAccount>();
 
     private UUID owner;
-    private double balance;
     private YamlConfiguration config;
     private File configFile;
 
@@ -49,6 +51,12 @@ public class PlayerAccount {
         return account;
     }
 
+    public static void saveAll() {
+        for(Map.Entry<UUID, PlayerAccount> entry : loadedAccounts.entrySet()) {
+            entry.getValue().save();
+        }
+    }
+
     /**
      * Load a player account from file or create one
      * @return boolean if the account had to be created
@@ -68,7 +76,6 @@ public class PlayerAccount {
                 config.load(configFile);
                 this.config = config;
                 this.configFile = configFile;
-                this.balance = config.getDouble("balance");
 
                 create();
                 toReturn = true;
@@ -77,7 +84,6 @@ public class PlayerAccount {
                 config.load(configFile);
                 this.config = config;
                 this.configFile = configFile;
-                this.balance = config.getDouble("balance");
                 toReturn = false;
             }
             return toReturn;
@@ -112,7 +118,7 @@ public class PlayerAccount {
      * @return Amount of money this account has stored
      */
     public Double getBalance() {
-        return balance;
+        return config.getDouble("balance");
     }
 
     /**
@@ -144,6 +150,6 @@ public class PlayerAccount {
 
     public void transact(Player playerTo, Number amount) {
         withdraw(amount);
-
+        getPlayerAccount(playerTo).deposit(amount);
     }
 }
