@@ -20,6 +20,9 @@ public class Pay extends BukkitCommand {
 
     @Override
     public boolean execute(CommandSender sender, String commandLabel, String[] args) {
+        if (args.length != 2) {
+            return false;
+        }
         if (sender instanceof Player) {
             Player p = (Player) sender;
             Player playerTo = Bukkit.getPlayer(args[0]);

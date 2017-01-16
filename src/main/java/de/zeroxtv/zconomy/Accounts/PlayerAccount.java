@@ -1,7 +1,5 @@
 package de.zeroxtv.zconomy.Accounts;
 
-import com.google.common.collect.Multiset;
-import com.sun.javafx.webkit.KeyCodeMap;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -143,13 +141,20 @@ public class PlayerAccount {
      * Withdraw money from the current balance
      * @param amount
      */
-    public void withdraw(Number amount) {
-        setBalance(getBalance() - amount.doubleValue());
-        save();
+    public boolean withdraw(Number amount) {
+        if (getBalance() - amount.doubleValue() >= 0) {
+            setBalance(getBalance() - amount.doubleValue());
+            save();
+            return true;
+        }
+        return false;
     }
 
-    public void transact(Player playerTo, Number amount) {
-        withdraw(amount);
-        getPlayerAccount(playerTo).deposit(amount);
+    public boolean transact(Player playerTo, Number amount) {
+        if (withdraw(amount)) {
+            getPlayerAccount(playerTo).deposit(amount);
+            return true;
+        }
+        return false;
     }
 }
