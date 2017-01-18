@@ -4,6 +4,7 @@ import de.zeroxtv.zconomy.Accounts.PlayerAccount;
 import de.zeroxtv.zconomy.Commands.Money;
 import de.zeroxtv.zconomy.Commands.Pay;
 import de.zeroxtv.zconomy.Commands.SetMoney;
+import de.zeroxtv.zconomy.Commands.addItem;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandMap;
@@ -47,6 +48,7 @@ public final class ZConomy extends JavaPlugin {
             commandMap.register("money", new Money("money"));
             commandMap.register("setmoney", new SetMoney("setmoney"));
             commandMap.register("pay", new Pay("pay"));
+            commandMap.register("additem", new addItem());
 
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();

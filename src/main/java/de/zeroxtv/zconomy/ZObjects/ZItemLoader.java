@@ -13,8 +13,12 @@ import java.util.ArrayList;
  * Created by ZeroxTV
  */
 public class ZItemLoader {
+    public static Boolean configLoaded;
+    public static File defaultConfigFile = new File("ZPlugins/ZConomy/Items/Items.yml");
+    private static File dirFile = new File("ZPlugins/ZConomy/Items");
 
     public static ArrayList<ZItem> loadItem(File configFile) {
+        loadConfigFile();
         try {
             YamlConfiguration config = new YamlConfiguration();
             config.load(configFile);
@@ -36,6 +40,7 @@ public class ZItemLoader {
     }
 
     public static ArrayList<ZItem> createItem(File configFile, ItemStack itemStack, Double value,Double offerValueMin, Double offerValueMax, Double requestValueMin, Double requestValueMax) {
+        loadConfigFile();
         try {
             YamlConfiguration config = new YamlConfiguration();
             config.load(configFile);
@@ -60,5 +65,15 @@ public class ZItemLoader {
             e.printStackTrace();
         }
         return ZItem.getItems();
+    }
+
+    private static void loadConfigFile() {
+        try {
+            if (configLoaded) return;
+            if (!dirFile.exists()) dirFile.mkdirs();
+            if (!defaultConfigFile.exists()) defaultConfigFile.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
