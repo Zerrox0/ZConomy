@@ -3,5 +3,6 @@ version: ${project.version}
 main: de.zeroxtv.zconomy.ZConomy
 prefix: ZConomy
 authors: [ZeroxTV]
+depend: [ZCore]
 description: Another great economy plugin
-website: http://zeroxtv.de
+load: STARTUP
