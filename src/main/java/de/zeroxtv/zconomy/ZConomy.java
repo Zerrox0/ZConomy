@@ -5,6 +5,7 @@ import de.zeroxtv.zconomy.Commands.Money;
 import de.zeroxtv.zconomy.Commands.Pay;
 import de.zeroxtv.zconomy.Commands.SetMoney;
 import de.zeroxtv.zconomy.Commands.addItem;
+import de.zeroxtv.zconomy.ZObjects.ZItemLoader;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandMap;
@@ -22,6 +23,7 @@ public final class ZConomy extends JavaPlugin {
     @Override
     public void onEnable() {
         logger = this.getServer().getConsoleSender();
+        ZItemLoader.loadAllItems();
         log(ChatColor.GREEN + "ZConomy activated!");
         instance = this;
         registerCommands();

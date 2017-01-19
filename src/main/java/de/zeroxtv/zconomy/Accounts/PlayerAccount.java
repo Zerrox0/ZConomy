@@ -1,5 +1,6 @@
 package de.zeroxtv.zconomy.Accounts;
 
+import de.zeroxtv.zcore.OtherUtil.NumberUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -83,6 +84,7 @@ public class PlayerAccount {
                 this.config = config;
                 this.configFile = configFile;
                 toReturn = false;
+                setBalance(NumberUtils.parseDouble(getBalance(), 2));
             }
             return toReturn;
 

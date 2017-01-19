@@ -45,10 +45,10 @@ public class ZItem {
     }
 
     public boolean hasOffer() {
-        return offerValueMin != 0 && offerValueMax != 0;
+        return (offerValueMax != 0);
     }
 
     public boolean hasRequest() {
-        return requestValueMin != 0 && requestValueMax != 0;
+        return (requestValueMax != 0);
     }
 }

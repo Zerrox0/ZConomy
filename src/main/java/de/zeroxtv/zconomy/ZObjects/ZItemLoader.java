@@ -13,12 +13,9 @@ import java.util.ArrayList;
  * Created by ZeroxTV
  */
 public class ZItemLoader {
-    public static Boolean configLoaded;
     public static File defaultConfigFile = new File("ZPlugins/ZConomy/Items/Items.yml");
-    private static File dirFile = new File("ZPlugins/ZConomy/Items");
 
     public static ArrayList<ZItem> loadItem(File configFile) {
-        loadConfigFile();
         try {
             YamlConfiguration config = new YamlConfiguration();
             config.load(configFile);
@@ -27,10 +24,10 @@ public class ZItemLoader {
                 new ZItem(Material.getMaterial(config.getString(path + ".material")),
                         Short.parseShort(config.getString(path + ".durability")),
                         config.getDouble(path + ".value"),
-                        config.getDouble(path + ".offer.valueMin"),
-                        config.getDouble(path + ".offer.valueMax"),
-                        config.getDouble(path + ".request.valueMin"),
-                        config.getDouble(path + ".request.valueMax"));
+                        config.getDouble(path + ".offer.minValue"),
+                        config.getDouble(path + ".offer.maxValue"),
+                        config.getDouble(path + ".request.minValue"),
+                        config.getDouble(path + ".request.maxValue"));
             }
 
         } catch (IOException | InvalidConfigurationException e) {
@@ -40,7 +37,6 @@ public class ZItemLoader {
     }
 
     public static ArrayList<ZItem> createItem(File configFile, ItemStack itemStack, Double value,Double offerValueMin, Double offerValueMax, Double requestValueMin, Double requestValueMax) {
-        loadConfigFile();
         try {
             YamlConfiguration config = new YamlConfiguration();
             config.load(configFile);
@@ -48,7 +44,7 @@ public class ZItemLoader {
             String material = itemStack.getType().name().toUpperCase();
             String path;
             for (int i = 0; i < 100; i++) {
-                if (config.contains(material + "_" + i)) {
+                if (!config.contains(material + "_" + i)) {
                     path = material + "_" + i;
                     config.addDefault(path + ".material", itemStack.getType().name());
                     config.addDefault(path + ".durability", itemStack.getDurability());
@@ -59,6 +55,7 @@ public class ZItemLoader {
                     config.addDefault(path + ".request.maxValue", requestValueMax);
                     config.save(configFile);
                     new ZItem(itemStack.getType(), itemStack.getDurability(), value, offerValueMin, offerValueMax, requestValueMin, requestValueMax);
+                    return ZItem.getItems();
                 }
             }
         } catch (IOException | InvalidConfigurationException e) {
@@ -67,13 +64,24 @@ public class ZItemLoader {
         return ZItem.getItems();
     }
 
-    private static void loadConfigFile() {
+
+    public static void loadAllItems() {
+        File pathFile = new File("ZPlugins/ZConomy/Items");
         try {
-            if (configLoaded) return;
-            if (!dirFile.exists()) dirFile.mkdirs();
-            if (!defaultConfigFile.exists()) defaultConfigFile.createNewFile();
+            defaultConfigFile.createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        if (!pathFile.exists()) {
+            pathFile.mkdirs() ;
+            return;
+        }
+        File[] listFiles = pathFile.listFiles();
+        for (File file : listFiles) {
+            System.out.println(file.getAbsolutePath());
+            if (file.isFile()) {
+                loadItem(file);
+            }
         }
     }
 }
